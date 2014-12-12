@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+
+                var arena = document.getElementById('fliers'),
+                    width = arena.offsetWidth,
+                    height = arena.offsetHeight,
+                    hw = width / 2,
+                    hh = height / 2;
+
+                setInterval(function addFlyer() {
+                    var flyer = document.createElement('div'),
+                        x = Math.random() * width,
+                        y = Math.random() * height,
+                        speed = 1,
+                        size = 0.3,
+                        interval = setInterval(pos, 100);
+                    function pos() {
+                        speed++;
+                        size *= 1.2;
+                        var trueSize = size * 3;
+                        if (trueSize > 80) trueSize = 80;
+                        var hts = trueSize / 2;
+                        flyer.style.top = (y - hts) + 'px';
+                        flyer.style.left = (x - hts) + 'px';
+                        flyer.style.fontSize = trueSize + 'px';
+                        var dx = x - hw,
+                            dy = y - hh,
+                            m = Math.sqrt(dx * dx + dy * dy),
+                            xs = dx * speed / m,
+                            ys = dy * speed / m;
+                        x += xs;
+                        y += ys;
+                        if (Math.abs(dx) - hts > hw || Math.abs(dy) - hts > hh) {
+                            arena.removeChild(flyer);
+                            clearInterval(interval);
+                        }
+                    }
+                    pos();
+                    flyer.appendChild(document.createTextNode('?'));
+                    flyer.classList.add('flyer');
+                    arena.appendChild(flyer);
+                }, 50);
+
+            });
+        </script>
+        <style type="text/css">
+            body {
+                background: black;
+                overflow: hidden;
+            }
+            #fliers,
+            #overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            #fliers {
+                z-index: 0;
+            }
+            #overlay {
+                background: url('logo.png') 50% 50% no-repeat;
+                z-index: 1;
+            }
+            .flyer {
+                position: absolute;
+                transition: all 0.1s linear;
+                color: white;
+                font-family: Calibri;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="fliers"></div>
+        <div id="overlay"></div>
+    </body>
+</html>
